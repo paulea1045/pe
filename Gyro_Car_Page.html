@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC Gyro Car - Paul Eam Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #858eb0;
+            --secondary: #b0a685;
+            --accent: #85b0a6;
+            --dark: #2a2d3a;
+            --light-bg: #fafafa;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            color: var(--dark);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Center all images */
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 0.98));
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(133, 142, 176, 0.1);
+        }
+
+        .nav-left a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-left a:hover {
+            color: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-right a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-right a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:hover {
+            color: var(--primary);
+        }
+
+        .nav-right a:hover:after {
+            width: 100%;
+        }
+
+        /* Background Grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(133, 142, 176, 0.05) 19px, rgba(133, 142, 176, 0.05) 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(133, 142, 176, 0.05) 19px, rgba(133, 142, 176, 0.05) 20px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Main Content */
+        .content {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 3rem;
+            padding-right: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        /* Project Header */
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .company-tag {
+            display: inline-block;
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 0.6rem 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(133, 142, 176, 0.1);
+        }
+
+        .company-tag img {
+            height: 40px;
+            vertical-align: middle;
+        }
+
+        .project-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            line-height: 1.1;
+        }
+
+        .project-meta {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* Hero Image */
+        .hero-image {
+            width: 100%;
+            height: 800px;
+            background-image: url('project1.png');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 4rem;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(133, 142, 176, 0.15);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Context Section */
+        .context-section {
+            margin-bottom: 5rem;
+            padding: 2.5rem 3rem;
+            background: linear-gradient(135deg, rgba(133, 142, 176, 0.08), rgba(133, 176, 166, 0.08));
+            border-left: 4px solid var(--accent);
+        }
+
+        .context-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            margin-bottom: 1rem;
+        }
+
+        .context-text {
+            font-size: 1.4rem;
+            line-height: 1.9;
+            color: var(--dark);
+            font-weight: 400;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 6rem;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, rgba(133, 142, 176, 0.12), rgba(133, 176, 166, 0.12));
+            padding: 1.8rem 2.5rem;
+            border-left: 5px solid var(--primary);
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+        }
+
+        .section-content {
+            font-size: 1.35rem;
+            line-height: 1.9;
+            color: var(--dark);
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .column {
+            background: white;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(133, 142, 176, 0.08);
+        }
+
+        .column h3 {
+            font-size: 1.6rem;
+            color: var(--dark);
+            margin-bottom: 1.8rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.7rem;
+        }
+
+        .column ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .column li {
+            padding: 0.9rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+            font-size: 1.25rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .column li:before {
+            content: '▪';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.3rem;
+            line-height: 1.7;
+        }
+
+        /* Image Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            margin: 3.5rem 0;
+        }
+
+        .image-container {
+            background: white;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(133, 142, 176, 0.1);
+        }
+
+        /* Make both images visually align */
+        .image-container img {
+            width: 100%;
+            height: 420px;          /* pick a height you like */
+            object-fit: contain;    /* instead of cover */
+            background: white;      /* so empty areas look clean */
+        }
+
+
+        .image-caption {
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark);
+            background: var(--light-bg);
+            font-size: 0.95rem;
+            letter-spacing: 0.02rem;
+        }
+
+        /* Full Width Image */
+        .full-width-image {
+            width: 100%;
+            margin: 4rem 0;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(133, 142, 176, 0.1);
+        }
+
+        .full-width-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Results Grid */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin: 3.5rem 0;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(133, 142, 176, 0.1), rgba(133, 176, 166, 0.1));
+            padding: 2.5rem;
+            text-align: center;
+        }
+
+        .result-value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        .result-label {
+            font-size: 1.25rem;
+            color: var(--dark);
+            font-weight: 600;
+            letter-spacing: 0.02rem;
+        }
+
+        /* Skills Section */
+        .skills-section {
+            margin-bottom: 5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.8rem;
+            margin-top: 2.5rem;
+        }
+
+        .skill-card {
+            background: linear-gradient(135deg, rgba(133, 142, 176, 0.1), rgba(133, 176, 166, 0.1));
+            padding: 1.8rem;
+            text-align: center;
+        }
+
+        .skill-card h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+
+        /* GIF Section */
+        .gif-section {
+            margin-top: 5rem;
+        }
+
+        .gif-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            margin-top: 2.5rem;
+        }
+
+        /* UPDATED: tall, cropped GIFs that only show (and animate visually) on hover */
+        .gif-container {
+            background: white;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(133, 142, 176, 0.1);
+            height: 420px; /* make them tall */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transform: scale(1.02);
+            opacity: 0;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .gif-container:hover img {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .gif-caption {
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark);
+            background: var(--light-bg);
+            font-size: 0.95rem;
+            letter-spacing: 0.02rem;
+            border-top: 1px solid rgba(133, 142, 176, 0.25);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .project-title {
+                font-size: 3rem;
+            }
+
+            .two-column, .image-grid, .results-grid, .gif-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+
+            .gif-container {
+                height: 360px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-right {
+                gap: 1.5rem;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .hero-image {
+                height: 500px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gif-container {
+                height: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Grid -->
+    <div class="background-grid"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-left">
+            <a href="websitev1.html">← Back to Portfolio</a>
+        </div>
+        <div class="nav-right">
+            <a href="websitev1.html#project">Projects</a>
+            <a href="websitev1.html#contact">Contact</a>
+            <a href="about_me.html">About</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Project Header -->
+        <div class="project-header">
+            <div class="company-tag">
+                <span style="color: var(--primary); font-weight: 700; font-size: 1.2rem;">UPPER STORY</span>
+            </div>
+            <h1 class="project-title">Gyro-Car Design</h1>
+            <p class="project-meta">Upper Story | June - September 2025</p>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="hero-image">
+            <img src="before_and_after_car.png" style="height: 700px" style="margin: 400px;" >
+        </div>
+
+        <!-- Context Section -->
+        <section class="context-section">
+            <div class="context-label">Context</div>
+            <p class="context-text">This project was developed as part of a product design internship at Upper Story, where I worked on reimagining the next generation of gyroscopic RC cars for educational and recreational use.</p>
+        </section>
+
+        <!-- Goal Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Goal</h2>
+            </div>
+            <div class="section-content">
+                <p>Engineer a Gyro-RC car with a flywheel delivering <b>35% greater output</b> than the previous model while <b>maximizing battery efficiency</b>.</p>
+            </div>
+
+            <!-- Image Grid for Goal -->
+            <div class="image-grid">
+                <div class="image-container">
+                    <img src="car_front.png" alt="Front View">
+                    <div class="image-caption">Front View</div>
+                </div>
+                <div class="image-container">
+                    <img src="car_back.png" alt="Back View">
+                    <div class="image-caption">Back View</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Steps Taken Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Steps Taken</h2>
+            </div>
+            
+            <div class="two-column">
+                <div class="column">
+                    <h3>Design</h3>
+                    <ul>
+                        <li>Redesign/CAD the entire car in <b>Inventor</b></li>
+                        <li>Raise the flywheel, completely changing the geometry</li>
+                        <li>Increase battery size</li>
+                        <li>Change to <b>snap-in</b> "easy swap" battery system</li>
+                        <li>Design <b>custom SMT battery clips</b> with sheet metal</li>
+                        <li>Design a <b>battery charger from the ground-up</b></li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Manufacturing</h3>
+                    <ul>
+                        <li><b>Rapid prototype</b> using resin prints and CNC</li>
+                        <li>Manufacture and post process battery chargers using <b>SLA and airbrushes</b></li>
+                        <li>Reprogram the car with new IMU Library</li>
+                        <li>Incorporate auto-shutoff and battery charge states display</li>
+                        <li><b>DFM</b>: every part is 2-piece injection moldable</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Full Width Image -->
+            <div class="full-width-image">
+                <img src="battery_system_iterations.png" alt="Battery System Iterations">
+                <div class="image-caption">Battery System Iterations</div>
+            </div>
+
+            <!-- More Images -->
+            <div class="image-grid">
+                <div class="image-container">
+                    <img src="car_cad.png" alt="CAD Model">
+                    <div class="image-caption">CAD Model Development</div>
+                </div>
+                <div class="image-container">
+                    <img src="soldering.png" alt="Prototype">
+                    <div class="image-caption">Soldering PCB</div> 
+                </div>
+                <div class="image-container">
+                    <img src="batterywiring.png" alt="Assembly">
+                    <div class="image-caption">Battery Charger Wiring</div>
+                </div>
+                <div class="image-container">
+                    <img src="batterychargeriterations.png" style="width: 350px" style = "margin-left: 200px">
+                    <div class="image-caption">Battery Charger Iterations</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Results</h2>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-value">24%</div>
+                    <div class="result-label">Battery Size Increase</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">49%</div>
+                    <div class="result-label">Flywheel Output Increase</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-value">-10 min</div>
+                    <div class="result-label">Battery Swap Time</div>
+                </div>
+            </div>
+
+            <div class="section-content" style="margin-top: 2rem;">
+                <p>Successfully increased flywheel output power by <b>49%</b> while implementing a <b>2-piece injection moldable</b> design for all components. The new snap-in battery system reduced swap time by an estimated <b>10 minutes</b>, significantly <b>improving user experience</b>.</p>
+            </div>
+
+            <!-- Final Images -->
+            <div class="image-grid">
+                <div class="image-container">
+                    <img src="car_final.png" alt="Final Product">
+                    <div class="image-caption">Final Car</div>
+                </div>
+                <div class="image-container">
+                    <img src="batterychargerfinal.png" alt="Performance Data">
+                    <div class="image-caption">Final Battery Charger</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="skills-section">
+            <div class="section-header">
+                <h2 class="section-title">Skills Used</h2>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-card"><h4>Autodesk Inventor</h4></div>
+                <div class="skill-card"><h4>CAD Design</h4></div>
+                <div class="skill-card"><h4>SLA/FDM Printing</h4></div>
+                <div class="skill-card"><h4>CNC Machining</h4></div>
+                <div class="skill-card"><h4>Injection Molding</h4></div>
+                <div class="skill-card"><h4>DFM/DFA</h4></div>
+                <div class="skill-card"><h4>Rapid Prototyping</h4></div>
+                <div class="skill-card"><h4>C</h4></div>
+                <div class="skill-card"><h4>Sheet Metal Design</h4></div>
+                <div class="skill-card"><h4>Battery Systems</h4></div>
+                <div class="skill-card"><h4>Product Testing</h4></div>
+            </div>
+        </section>
+
+        <!-- GIF Section -->
+        <section class="gif-section">
+            <div class="section-header">
+                <h2 class="section-title">Project in Action</h2>
+            </div>
+
+            <div class="gif-grid">
+                <div class="gif-container">
+                    <img src="wheel_sprin_gif.gif" alt="Project GIF 1">
+                    <div class="gif-caption">Car in Motion</div>
+                </div>
+                <div class="gif-container">
+                    <img src="cnc_gif.gif" alt="Project GIF 2">
+                    <div class="gif-caption">Flywheel CNC timelapse</div>
+                </div>
+                <div class="gif-container">
+                    <img src="demo_car_gif.gif" alt="Project GIF 3">
+                    <div class="gif-caption">Car reacting to tilt</div>
+                </div>
+                <div class="gif-container">
+                    <img src="battery_swap.gif" alt="Project GIF 4">
+                    <div class="gif-caption">Battery Swap Example</div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.cdnfonts.com/css/garet');
+
+        :root {
+            --primary: #858eb0;
+            --secondary: #b0a685;
+            --accent: #85b0a6;
+            --dark: #2a2d3a;
+            --light-bg: #fafafa;
+        }
+
+        body {
+            font-family: 'Garet', sans-serif;
+            background-color: #ffffff;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Center all images */
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 0.98));
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 3rem;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.6s ease;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(133, 142, 176, 0.1);
+            animation: slideDown 0.6s ease-out 2s forwards;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+            letter-spacing: 0.05rem;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        /* Background Images - Fixed Position */
+        .background-images {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .background-images::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(133, 142, 176, 0.08) 19px, rgba(133, 142, 176, 0.08) 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(133, 142, 176, 0.08) 19px, rgba(133, 142, 176, 0.08) 20px);
+        }
+
+        .background-images::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(133, 142, 176, 0.05), transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(133, 176, 166, 0.05), transparent 50%);
+        }
+
+        .cover-image {
+            position: absolute;
+            width: 45%;
+            height: 60%;
+            opacity: 0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 10px 30px rgba(133, 142, 176, 0.15));
+        }
+
+        .cover-image.left {
+            left: 0;
+            bottom: 0;
+            transform: translateX(-100%);
+            animation: slideInLeft 1s ease-out 0.3s forwards;
+            scale: 2.1;
+            background-image: url('left_image_clear.png');
+        }
+
+        .cover-image.right {
+            right: 0;
+            bottom: 0;
+            transform: translateX(100%);
+            animation: slideInRight 1s ease-out 0.3s forwards;
+            scale: 2;
+            background-image: url('right_image_clear.png');
+        }
+
+        /* Cover Page */
+        .cover-page {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            padding: 2rem;
+            z-index: 1;
+        }
+
+        .cover-content {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            max-width: 800px;
+        }
+
+        .name-tag {
+            border: 3px solid var(--primary);
+            padding: 0.6rem 2.5rem;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(-30px);
+            animation: fadeInDown 0.8s ease-out 0.2s forwards;
+            background: white;
+            box-shadow: 0 4px 15px rgba(133, 142, 176, 0.1);
+        }
+
+        .name-tag span {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--primary);
+            letter-spacing: 0.3rem;
+            font-weight: 600;
+        }
+
+        .accent-bg {
+            background: linear-gradient(135deg, rgba(133, 142, 176, 0.15), rgba(133, 176, 166, 0.15));
+            padding: 1.5rem 3rem;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-100%);
+            animation: slideInLeft 0.8s ease-out 0.5s forwards;
+            margin-bottom: 1rem;
+        }
+
+        .cover-content h1 {
+            font-size: 6rem;
+            color: var(--dark);
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideInRight 1s ease-out 0.6s forwards;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            font-style: italic;
+            margin-top: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out 1s forwards;
+            color: var(--secondary);
+            border-top: 2px solid var(--secondary);
+            border-bottom: 2px solid var(--secondary);
+            padding: 0.5rem 0;
+            display: inline-block;
+            letter-spacing: 0.15rem;
+            font-weight: 500;
+        }
+
+        .bio {
+            max-width: 500px;
+            margin: 2rem auto 0;
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-out 1.2s forwards;
+            color: var(--dark);
+        }
+
+        .bio-line {
+            margin: 0.3rem 0;
+            font-weight: 500;
+        }
+
+        @keyframes fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Projects Section */
+        #projects {
+            padding: 2rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(250, 250, 250, 0.95) 100%);
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+        }
+
+        /* Projects header/title */
+        .projects-header {
+            text-align: center;
+            margin: 0 auto 2.5rem;
+            max-width: 95vw;
+        }
+
+        .projects-header h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
+            color: var(--dark);
+        }
+
+        .projects-header-line {
+            width: 140px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            margin: 1rem auto 0;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            max-width: 95vw;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            position: relative;
+            cursor: pointer;
+            overflow: visible;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            height: auto;
+            min-height: auto;
+        }
+
+        .project-card:hover {
+            transform: scale(1.02);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 45vh;
+            min-height: 400px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Individual project backgrounds */
+        .project-card:nth-child(1) .project-image {
+            background-image: url('rc_gyro_car_front.jpg');
+        }
+
+        .project-card:nth-child(2) .project-image {
+            background-image: url('brakes_front.jpg');
+        }
+
+        .project-card:nth-child(3) .project-image {
+            background-image: url('heat_sensor_front.jpg');
+        }
+
+        .project-card:nth-child(4) .project-image {
+            background-image: url('bike_brake_front.png');
+        }
+
+        .project-card:nth-child(5) .project-image {
+            background-image: url('line_robot_front.png');
+        }
+
+        .project-card:nth-child(6) .project-image {
+            background-image: url('marley_cart_front.png');
+        }
+
+        .project-card:nth-child(7) .project-image {
+            background-image: url('dispenser_front.jpg');
+        }
+
+        .project-card:nth-child(8) .project-image {
+            background-image: url('other_projects_front.png');
+        }
+
+        .project-skills {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-skills {
+            opacity: 1;
+        }
+
+        .project-skills h4 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--primary);
+        }
+
+        .project-skills ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .project-skills li {
+            margin: 0.7rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.05rem;
+            color: var(--dark);
+        }
+
+        .project-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.2rem;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--dark);
+            background: white;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+            border-top: 2px solid var(--dark);
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, rgba(250, 250, 250, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        #contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(133, 142, 176, 0.03) 35px, rgba(133, 142, 176, 0.03) 70px);
+            pointer-events: none;
+        }
+
+        #contact h2 {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+            position: relative;
+            z-index: 1;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-btn {
+            padding: 1.2rem 2.5rem;
+            background: var(--dark);
+            color: white;
+            text-decoration: none;
+            border: 3px solid var(--dark);
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: left 0.3s ease;
+            z-index: 0;
+        }
+
+        .contact-btn:hover {
+            border-color: var(--primary);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--primary);
+        }
+
+        .contact-btn:hover::before {
+            left: 0;
+        }
+
+        .contact-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animations */
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-card {
+                height: 50vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cover-content h1 {
+                font-size: 3rem;
+            }
+
+            .cover-image {
+                width: 40%;
+                height: 50%;
+            }
+            
+            .project-card {
+                height: 40vh;
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                gap: 1rem;
+            }
+            
+            .cover-content h1 {
+                font-size: 2rem;
+            }
+            
+            .project-card {
+                height: 35vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Background Images -->
+    <div class="background-images">
+        <div class="cover-image left"></div>
+        <div class="cover-image right"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact Me</a>
+        <a href="about_me.html">About Me</a>
+    </nav>
+
+    <!-- Cover Page -->
+    <section class="cover-page">
+        <div class="cover-content">
+            <div class="name-tag">
+                <span>PORTFOLIO</span>
+            </div>
+            <div class="accent-bg">
+                <h1>PAUL EAM</h1>
+            </div>
+            <div class="subtitle">MECHANICAL ENGINEERING</div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <!-- NEW Projects heading -->
+        <div class="projects-header">
+            <h2>Projects</h2>
+            <div class="projects-header-line"></div>
+        </div>
+
+        <div class="projects-grid">
+            <a href="Gyro_Car_Page.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• CAD</li>
+                            <li>• Injection Molding</li>
+                            <li>• Rapid Prototype</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">RC Gyro Car</div>
+                </div>
+            </a>
+
+            <a href="project2.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• FEA</li>
+                            <li>• Thermal Analysis</li>
+                            <li>• Manufacturing</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">Formula Racing Brakes</div>
+                </div>
+            </a>
+
+            <a href="project3.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• Sheet Metal</li>
+                            <li>• Waterjet</li>
+                            <li>• Solidworks</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">Formula Racing Heat Sensor</div>
+                </div>
+            </a>
+
+            <a href="project4.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• Siemens NX</li>
+                            <li>• Topology Optimization</li>
+                            <li>• FEA</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">Bike Brake Caliper Design</div>
+                </div>
+            </a>
+
+            <a href="project5.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• C</li>
+                            <li>• Python</li>
+                            <li>• Embedded Systems</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">Line-Following Robot</div>
+                </div>
+            </a>
+
+            <a href="project6.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• User Research</li>
+                            <li>• CNC Router</li>
+                            <li>• Woodworking</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">Marley Panel Cart</div>
+                </div>
+            </a>
+
+            <a href="project7.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• Sketching</li>
+                            <li>• Mockup Testing</li>
+                            <li>• Client Interaction</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">Fridge Dispenser Adaptor</div>
+                </div>
+            </a>
+
+            <a href="project8.html" class="project-card">
+                <div class="project-image">
+                    <div class="project-skills">
+                        <h4>Key Skills</h4>
+                        <ul>
+                            <li>• CAD</li>
+                            <li>• Rendering</li>
+                            <li>• C/Python</li>
+                        </ul>
+                    </div>
+                    <div class="project-title">Other Projects</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <div class="contact-buttons">
+            <a href="Paul_Eam_Resume_2025.pdf" class="contact-btn" target="_blank"><span>Resume</span></a>
+            <a href="https://linkedin.com/in/yourprofile" class="contact-btn" target="_blank"><span>LinkedIn</span></a>
+            <a href="mailto:pauleam2027@u.northwestern.edu" class="contact-btn"><span>Gmail</span></a>
+            <a href="tel:+16308630444" class="contact-btn"><span>Phone</span></a>
+        </div>
+    </section>
+</body>
+</html>
