@@ -11,7 +11,8 @@
             box-sizing: border-box;
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+        /* Trade-Gothic-ish font */
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap');
 
         :root {
             --primary: #858eb0;
@@ -22,7 +23,7 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background-color: #ffffff;
             color: var(--dark);
             overflow-x: hidden;
@@ -290,16 +291,17 @@
             background: white;
             overflow: hidden;
             box-shadow: 0 6px 25px rgba(133, 142, 176, 0.1);
+            cursor: default;
+            position: relative;
         }
 
-        /* Make both images visually align */
+        /* base image sizing in grids */
         .image-container img {
             width: 100%;
-            height: 420px;          /* pick a height you like */
-            object-fit: contain;    /* instead of cover */
-            background: white;      /* so empty areas look clean */
+            height: 420px;
+            object-fit: contain;
+            background: white;
         }
-
 
         .image-caption {
             padding: 1rem;
@@ -309,6 +311,31 @@
             background: var(--light-bg);
             font-size: 0.95rem;
             letter-spacing: 0.02rem;
+        }
+
+        /* slideshow thumbnails indicator */
+        .slideshow-trigger {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .slideshow-trigger::after {
+            content: "●●●";
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            font-size: 1.2rem;
+            color: rgba(42, 45, 58, 0.6);
+            background: rgba(250,250,250,0.9);
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+
+        /* shared hover treatment for clickable cards */
+        .slideshow-trigger:hover,
+        .gif-container:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 35px rgba(133, 142, 176, 0.35);
         }
 
         /* Full Width Image */
@@ -391,29 +418,48 @@
             margin-top: 2.5rem;
         }
 
-        /* UPDATED: tall, cropped GIFs that only show (and animate visually) on hover */
         .gif-container {
             background: white;
-            overflow: hidden;
             box-shadow: 0 6px 25px rgba(133, 142, 176, 0.1);
-            height: 420px; /* make them tall */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+            cursor: pointer; /* now clearly clickable */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .gif-container img {
+
+        .gif-inner {
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            background: #fafafa;
+        }
+
+        .gif-inner img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            display: block;
-            transform: scale(1.02);
-            opacity: 0;
+            object-fit: contain; /* was cover – fixes “cut off” issue */
+            background: #fafafa;
             transition: opacity 0.35s ease, transform 0.35s ease;
         }
 
-        .gif-container:hover img {
+
+        .gif-static {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .gif-anim {
+            opacity: 0;
+            z-index: 2;
+            transform: scale(1.02);
+        }
+
+        .gif-container:hover .gif-static {
+            opacity: 0;
+        }
+
+        .gif-container:hover .gif-anim {
             opacity: 1;
             transform: scale(1.05);
         }
@@ -427,6 +473,99 @@
             font-size: 0.95rem;
             letter-spacing: 0.02rem;
             border-top: 1px solid rgba(133, 142, 176, 0.25);
+        }
+
+        /* Lightbox / slideshow modal */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 0; /* was 2rem – full screen now */
+        }
+
+        .lightbox-overlay.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 92vw;   /* was 95vw */
+            max-height: 92vh;  /* was 95vh */
+            width: 92vw;
+            height: 92vh;      /* fill viewport height */
+            background: #111111;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            position: relative;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lightbox-image-wrapper {
+            position: relative;
+            flex: 1;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            min-height: 80vh; /* was 70vh – makes slides feel almost full screen */
+        }
+
+        .lightbox-image-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .lightbox-caption {
+            margin-top: 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 10px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.4);
+            border: none;
+            color: #ffffff;
+            font-size: 2rem;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-prev {
+            left: 10px;
+        }
+
+        .lightbox-next {
+            right: 10px;
+        }
+
+        /* Hidden gallery data */
+        .gallery-data {
+            display: none;
         }
 
         /* Responsive */
@@ -448,8 +587,12 @@
                 padding-right: 2rem;
             }
 
-            .gif-container {
-                height: 360px;
+            .gif-inner {
+                height: 470px;
+            }
+
+            .lightbox-image-wrapper {
+                height: 420px;
             }
         }
 
@@ -478,8 +621,12 @@
                 grid-template-columns: 1fr;
             }
 
-            .gif-container {
-                height: 320px;
+            .gif-inner {
+                height: 370px;
+            }
+
+            .lightbox-image-wrapper {
+                height: 360px;
             }
         }
     </style>
@@ -491,11 +638,11 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-left">
-            <a href="websitev1.html">← Back to Portfolio</a>
+            <a href="index.html">← Back to Portfolio</a>
         </div>
         <div class="nav-right">
-            <a href="websitev1.html#project">Projects</a>
-            <a href="websitev1.html#contact">Contact</a>
+            <a href="index.html#project">Projects</a>
+            <a href="index.html#contact">Contact</a>
             <a href="about_me.html">About</a>
         </div>
     </nav>
@@ -513,7 +660,7 @@
 
         <!-- Hero Image -->
         <div class="hero-image">
-            <img src="before_and_after_car.png" style="height: 700px" style="margin: 400px;" >
+            <img src="before_and_after_car.png" style="height: 700px" style="margin: 400px;">
         </div>
 
         <!-- Context Section -->
@@ -580,23 +727,23 @@
                 <div class="image-caption">Battery System Iterations</div>
             </div>
 
-            <!-- More Images -->
+            <!-- More Images (top two are slideshow thumbnails) -->
             <div class="image-grid">
+                <div class="image-container" data-gallery-id="gallery-1">
+                    <img src="battery_charger_iterations.png" alt="CAD Model">
+                    <div class="image-caption">Battery Charger Development</div>
+                </div>
+                <div class="image-container" data-gallery-id="gallery-2">
+                    <img src="batterywiring.png" alt="Prototype">
+                    <div class="image-caption">Battery Charger Wiring</div> 
+                </div>
                 <div class="image-container">
-                    <img src="car_cad.png" alt="CAD Model">
+                    <img src="car_cad.png" alt="Assembly">
                     <div class="image-caption">CAD Model Development</div>
                 </div>
                 <div class="image-container">
-                    <img src="soldering.png" alt="Prototype">
-                    <div class="image-caption">Soldering PCB</div> 
-                </div>
-                <div class="image-container">
-                    <img src="batterywiring.png" alt="Assembly">
-                    <div class="image-caption">Battery Charger Wiring</div>
-                </div>
-                <div class="image-container">
-                    <img src="batterychargeriterations.png" style="width: 350px" style = "margin-left: 200px">
-                    <div class="image-caption">Battery Charger Iterations</div>
+                    <img src="soldering.png">
+                    <div class="image-caption">Soldering PCB</div>
                 </div>
             </div>
         </section>
@@ -657,6 +804,7 @@
                 <div class="skill-card"><h4>Sheet Metal Design</h4></div>
                 <div class="skill-card"><h4>Battery Systems</h4></div>
                 <div class="skill-card"><h4>Product Testing</h4></div>
+                <div class="skill-card"><h4>User Research</h4></div>
             </div>
         </section>
 
@@ -668,23 +816,158 @@
 
             <div class="gif-grid">
                 <div class="gif-container">
-                    <img src="wheel_sprin_gif.gif" alt="Project GIF 1">
+                    <div class="gif-inner">
+                        <!-- still image (first frame) -->
+                        <img class="gif-static" src="spinning_gif_cover.png" alt="Car in Motion (still)">
+                        <!-- animated gif -->
+                        <img class="gif-anim" src="wheel_sprin_gif.gif" alt="Car in Motion">
+                    </div>
                     <div class="gif-caption">Car in Motion</div>
                 </div>
                 <div class="gif-container">
-                    <img src="cnc_gif.gif" alt="Project GIF 2">
+                    <div class="gif-inner">
+                        <img class="gif-static" src="cnc_cover.png" alt="Flywheel CNC timelapse (still)">
+                        <img class="gif-anim" src="cnc_gif.gif" alt="Flywheel CNC timelapse">
+                    </div>
                     <div class="gif-caption">Flywheel CNC timelapse</div>
                 </div>
                 <div class="gif-container">
-                    <img src="demo_car_gif.gif" alt="Project GIF 3">
+                    <div class="gif-inner">
+                        <img class="gif-static" src="demo_cover.png" alt="Car reacting to tilt (still)">
+                        <img class="gif-anim" src="demo_car_gif.gif" alt="Car reacting to tilt">
+                    </div>
                     <div class="gif-caption">Car reacting to tilt</div>
                 </div>
                 <div class="gif-container">
-                    <img src="battery_swap.gif" alt="Project GIF 4">
+                    <div class="gif-inner">
+                        <img class="gif-static" src="swap_cover.png" alt="Battery Swap Example (still)">
+                        <img class="gif-anim" src="battery_swap.gif" alt="Battery Swap Example">
+                    </div>
                     <div class="gif-caption">Battery Swap Example</div>
                 </div>
             </div>
         </section>
     </div>
+
+    <!-- Lightbox for slideshows -->
+    <div class="lightbox-overlay" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <div class="lightbox-content">
+            <div class="lightbox-image-wrapper">
+                <button class="lightbox-arrow lightbox-prev" id="lightboxPrev">&#10094;</button>
+                <img id="lightboxImg" src="" alt="">
+                <button class="lightbox-arrow lightbox-next" id="lightboxNext">&#10095;</button>
+            </div>
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+    </div>
+
+    <!-- Hidden gallery data: edit src + data-caption, add/remove slides freely -->
+    <div class="gallery-data" id="gallery-1">
+        <div class="gallery-slide" data-caption="CAD model – slide 1 description.">
+            <img src="battery_charger_iterations.png" alt="CAD Model slide 1">
+        </div>
+        <div class="gallery-slide" data-caption="CAD model – slide 2 description.">
+            <img src="batterywiring.png" alt="CAD Model slide 2">
+        </div>
+    </div>
+
+    <div class="gallery-data" id="gallery-2">
+        <div class="gallery-slide" data-caption="Soldering – slide 1 description.">
+            <img src="soldering.png" alt="Soldering slide 1">
+        </div>
+        <div class="gallery-slide" data-caption="Soldering – slide 2 description.">
+            <img src="soldering.png" alt="Soldering slide 2">
+        </div>
+        <div class="gallery-slide" data-caption="Soldering – slide 3 description.">
+            <img src="soldering.png" alt="Soldering slide 3">
+        </div>
+    </div>
+
+    <script>
+        // Simple lightbox/slideshow logic
+        (function () {
+            const overlay = document.getElementById('lightbox');
+            const imgEl = document.getElementById('lightboxImg');
+            const captionEl = document.getElementById('lightboxCaption');
+            const closeBtn = document.getElementById('lightboxClose');
+            const prevBtn = document.getElementById('lightboxPrev');
+            const nextBtn = document.getElementById('lightboxNext');
+
+            let currentGalleryEl = null;
+            let slides = [];
+            let currentIndex = 0;
+
+            function loadSlides(galleryId) {
+                currentGalleryEl = document.getElementById(galleryId);
+                slides = Array.from(currentGalleryEl.querySelectorAll('.gallery-slide'));
+            }
+
+            function showSlide(index) {
+                if (!slides.length) return;
+                if (index < 0) index = slides.length - 1;
+                if (index >= slides.length) index = 0;
+                currentIndex = index;
+
+                const slide = slides[currentIndex];
+                const img = slide.querySelector('img');
+                const caption = slide.getAttribute('data-caption') || img.alt || '';
+
+                imgEl.src = img.src;
+                imgEl.alt = img.alt;
+                captionEl.textContent = caption;
+            }
+
+            function openLightbox(galleryId) {
+                loadSlides(galleryId);
+                if (!slides.length) return;
+                showSlide(0);
+                overlay.classList.add('active');
+            }
+
+            function closeLightbox() {
+                overlay.classList.remove('active');
+            }
+
+            // Click handlers on thumbnails
+            document.querySelectorAll('.slideshow-trigger').forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const galleryId = trigger.getAttribute('data-gallery-id');
+                    if (galleryId) {
+                        openLightbox(galleryId);
+                    }
+                });
+            });
+
+            // Controls
+            closeBtn.addEventListener('click', closeLightbox);
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    closeLightbox();
+                }
+            });
+
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showSlide(currentIndex - 1);
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showSlide(currentIndex + 1);
+            });
+
+            // ESC to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                    closeLightbox();
+                } else if (e.key === 'ArrowLeft' && overlay.classList.contains('active')) {
+                    showSlide(currentIndex - 1);
+                } else if (e.key === 'ArrowRight' && overlay.classList.contains('active')) {
+                    showSlide(currentIndex + 1);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
