@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula Racing Heat Sensor Mount - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Trade-Gothic-ish font */
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #858eb0;
+            --secondary: #b0a685;
+            --accent: #85b0a6;
+            --dark: #2a2d3a;
+            --light-bg: #fafafa;
+        }
+
+        body {
+            font-family: 'Barlow', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            color: var(--dark);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Navigation Bar (same as Gyro Car + Brakes page) */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 0.98));
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(133, 142, 176, 0.1);
+        }
+
+        .nav-left a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-left a:hover {
+            color: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-right a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-right a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:hover {
+            color: var(--primary);
+        }
+
+        .nav-right a:hover:after {
+            width: 100%;
+        }
+
+        /* Background Grid */
+        .background-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(133,142,176,0.05) 19px, rgba(133,142,176,0.05) 20px),
+                repeating-linear-gradient(90deg, transparent, transparent 19px, rgba(133,142,176,0.05) 19px, rgba(133,142,176,0.05) 20px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Main Content */
+        .content {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-left: 3rem;
+            padding-right: 3rem;
+            padding-bottom: 5rem;
+        }
+
+        /* ====== TOP PORTION (kept same layout as Gyro Car) ====== */
+        .project-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .company-tag {
+            display: inline-block;
+            background: white;
+            border: 2px solid var(--primary);
+            padding: 0.6rem 2.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(133, 142, 176, 0.1);
+        }
+
+        .company-tag span {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .project-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+            line-height: 1.1;
+        }
+
+        .project-meta {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* Hero Image */
+        .hero-image {
+            width: 100%;
+            height: 800px;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 4rem;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(133, 142, 176, 0.15);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Context Section */
+        .context-section {
+            margin-bottom: 5rem;
+            padding: 2.5rem 3rem;
+            background: linear-gradient(135deg, rgba(133,142,176,0.08), rgba(133,176,166,0.08));
+            border-left: 4px solid var(--accent);
+        }
+
+        .context-label {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            margin-bottom: 1rem;
+        }
+
+        .context-text {
+            font-size: 1.4rem;
+            line-height: 1.9;
+            color: var(--dark);
+            font-weight: 400;
+        }
+
+        /* Generic Sections */
+        .section {
+            margin-bottom: 6rem;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, rgba(133,142,176,0.12), rgba(133,176,166,0.12));
+            padding: 1.8rem 2.5rem;
+            border-left: 5px solid var(--primary);
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+        }
+
+        .section-content {
+            font-size: 1.35rem;
+            line-height: 1.9;
+            color: var(--dark);
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .column {
+            background: white;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(133,142,176,0.08);
+        }
+
+        .column h3 {
+            font-size: 1.6rem;
+            color: var(--dark);
+            margin-bottom: 1.8rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.7rem;
+        }
+
+        .column ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .column li {
+            padding: 0.9rem 0;
+            padding-left: 1.8rem;
+            position: relative;
+            font-size: 1.25rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .column li::before {
+            content: '▪';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.3rem;
+            line-height: 1.7;
+        }
+
+        /* Image Grid / Placeholders */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            margin: 3.5rem 0;
+        }
+
+        .image-container {
+            background: white;
+            overflow: hidden;
+            box-shadow: 0 6px 25px rgba(133,142,176,0.1);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            background: white;
+        }
+
+        .image-caption {
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark);
+            background: var(--light-bg);
+            font-size: 0.95rem;
+            letter-spacing: 0.02rem;
+        }
+
+        /* Results Grid */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            margin: 3.5rem 0;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(133,142,176,0.1), rgba(133,176,166,0.1));
+            padding: 2.5rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .result-body {
+            font-size: 1.25rem;
+            line-height: 1.8;
+        }
+
+        /* Skills */
+        .skills-section {
+            margin-bottom: 5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.8rem;
+            margin-top: 2.5rem;
+        }
+
+        .skill-card {
+            background: linear-gradient(135deg, rgba(133,142,176,0.1), rgba(133,176,166,0.1));
+            padding: 1.8rem;
+            text-align: center;
+        }
+
+        .skill-card h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .project-title {
+                font-size: 3rem;
+            }
+
+            .two-column, .image-grid, .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+
+            .hero-image {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-right {
+                gap: 1.5rem;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Grid -->
+    <div class="background-grid"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-left">
+            <a href="index.html">← Back to Portfolio</a>
+        </div>
+        <div class="nav-right">
+            <a href="index.html#project">Projects</a>
+            <a href="index.html#contact">Contact</a>
+            <a href="about_me.html">About</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- ===== TOP PORTION: same layout as other projects ===== -->
+        <div class="project-header">
+            <div class="company-tag">
+                <span>Northwestern Formula Racing</span>
+            </div>
+            <h1 class="project-title">Formula Racing Heat Sensor Mount</h1>
+            <p class="project-meta">Vehicle Dynamics &amp; Data Acquisition | 2023 – 2024</p>
+        </div>
+
+        <!-- Hero image: replace src with your three-image hero composite -->
+        <div class="hero-image">
+            <img src="heat_sensor_hero.jpg" alt="Formula racing heat sensor mount hero image">
+        </div>
+
+        <!-- Context -->
+        <section class="context-section">
+            <div class="context-label">Context</div>
+            <p class="context-text">
+                To better understand tire performance and setup, the team wanted to measure tread temperature across
+                the contact patch in real time. I was responsible for designing a <b>modular heat sensor mount</b> that
+                could live near the wheel, survive race conditions, and integrate cleanly with both suspension and data
+                acquisition systems.
+            </p>
+        </section>
+
+        <!-- Goal -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Goal</h2>
+            </div>
+            <div class="section-content">
+                <p>
+                    Create a <b>lightweight, cost-effective, and easy-to-mount/remove heat sensor bracket</b> that positions
+                    an IR sensor array near the rotating tire while clearing suspension components and brake lines.
+                </p>
+            </div>
+
+            <!-- Goal-related images -->
+            <div class="image-grid">
+                <div class="image-container">
+                    <img src="heat_sensor_cad.jpg" alt="CAD of heat sensor sheet metal bracket">
+                    <div class="image-caption">Flattened sheet metal bracket CAD</div>
+                </div>
+                <div class="image-container">
+                    <img src="heat_sensor_corner.jpg" alt="Heat sensor mount in suspension assembly">
+                    <div class="image-caption">Mount integrated into a corner</div>
+                </div>
+                <div class="image-container">
+                    <img src="heat_sensor_tire.jpg" alt="Heat sensor mount installed near tire">
+                    <div class="image-caption">Final mount installed (missing the sensor)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Steps Taken -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Steps Taken</h2>
+            </div>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Requirements &amp; Concept Development</h3>
+                    <ul>
+                        <li>Conducted working sessions with <b>suspension</b> and <b>data acquisition</b> sub-teams to define sensor coverage, mounting points, and packaging constraints.</li>
+                        <li>Mapped brake line routing, wheel travel, and steering envelope to understand worst-case interference scenarios.</li>
+                        <li>Sketched alternative bracket layouts that shared fasteners with existing suspension hardware to simplify assembly.</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Detailed Design</h3>
+                    <ul>
+                        <li>Modeled the bracket in <b>Solidworks</b>, using <b>sheet metal features</b> for bend allowance, reliefs, and flat pattern generation.</li>
+                        <li>Added stiffening flanges and lightening cutouts to balance rigidity with low mass.</li>
+                        <li>Ensured sensor field of view cleared the tire’s deformation range while staying protected from debris.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="column">
+                    <h3>Manufacturing &amp; Assembly</h3>
+                    <ul>
+                        <li>Created toolpaths and programmed the <b>waterjet</b> to cut flat patterns in-house.</li>
+                        <li>Designed simple bend sequence and fixtures so brackets could be formed accurately by student machinists.</li>
+                        <li>Standardized hole sizes and hardware to match existing fasteners on the car.</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Testing &amp; Iteration</h3>
+                    <ul>
+                        <li>Test-fit the mount on the car, checking clearance to brake lines and turning corners at full bump and lock.</li>
+                        <li>Ran track sessions while logging sensor data to confirm stable alignment and signal quality.</li>
+                        <li>Documented assembly steps so the mount can be installed or removed by new team members in minutes.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Images -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">CAD Images</h2>
+            </div>
+
+            <div class="image-grid">
+                <div class="image-container">
+                    <img src="heat_sensor_cover.jpg" alt="Waterjet-cut flat pattern of heat sensor bracket">
+                    <div class="image-caption">Heat sensor PCB casing</div>
+                </div>
+                <div class="image-container">
+                    <img src="heat_sensor_full_cad.png" alt="Bending sheet metal heat sensor bracket">
+                    <div class="image-caption">Full heat sensor mount without the casing</div>
+                </div>
+                <div class="image-container">
+                    <img src="heat_sensor_basic_cad.png" alt="Closeup of installed heat sensor mount">
+                    <div class="image-caption"> Assembly with the corner</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Results</h2>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-title">Durable, Track-Ready Hardware</div>
+                    <p class="result-body">
+                        The design became the <b>team’s first dedicated heat sensor mount</b> and has withstood
+                        <b>15+ hours of driving</b> so far with no structural issues, and will continue to see use in ongoing testing.
+                    </p>
+                </div>
+                <div class="result-card">
+                    <div class="result-title">Fast &amp; Simple to Use</div>
+                    <p class="result-body">
+                        The bracket can be installed or removed in <b>under 10 minutes</b>, using shared hardware and a
+                        <b>straightforward manufacturing and assembly process</b> that students can reproduce season after season.
+                    </p>
+                </div>
+            </div>
+
+            <div class="section-content" style="margin-top: 2rem;">
+                <p>
+                    The heat sensor mount gives the team reliable tire temperature data while aligning with Formula SAE
+                    constraints on weight, cost, and serviceability—unlocking better race-day decisions without adding
+                    complexity to the car.
+                </p>
+            </div>
+        </section>
+
+        <!-- Skills Used -->
+        <section class="skills-section">
+            <div class="section-header">
+                <h2 class="section-title">Skills Used</h2>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-card"><h4>Solidworks Sheet Metal</h4></div>
+                <div class="skill-card"><h4>Waterjet Programming</h4></div>
+                <div class="skill-card"><h4>Fixture &amp; Bend Design</h4></div>
+                <div class="skill-card"><h4>Design for Manufacturability</h4></div>
+                <div class="skill-card"><h4>Mechanical Packaging</h4></div>
+                <div class="skill-card"><h4>Vehicle Dynamics Constraints</h4></div>
+                <div class="skill-card"><h4>Cross-Team Collaboration</h4></div>
+                <div class="skill-card"><h4>Technical Documentation</h4></div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
